@@ -50,34 +50,48 @@ func main() {
 
 	}
 
-	// go through plaintext one rune at a time and parse each character
+	// if no plaintext was provided display generic help prompts,
+	// otherwise run encryption
 
-	var ciphertext string = ""
-	for _, rn := range plaintext {
-		ciphertext += runeShifter(rn)
-	}
+	if plaintext == "" {
 
-	// capitalise the ciphertext if requested
-
-	if capToggle {
-		ciphertext = s.ToUpper(ciphertext)
-	}
-
-	// check if a write file path was provided. if not, output to command line.
-
-	if writePath == "" {
-
-		// print to command line
-
-		fmt.Println(ciphertext)
+		fmt.Println("rot13 is a command line utility that performs rot13 encryption on text.")
+		fmt.Println("Use it to encrypt and decrypt text.")
+		fmt.Println("Example usage: 'rot13 hello world'")
+		fmt.Println("Type 'rot13 -h' for optional flags.")
 
 	} else {
 
-		// convert ciphertext to byte data and write to the file
+		// go through plaintext one rune at a time and parse each character
 
-		outputData := []byte(ciphertext)
-		err := os.WriteFile(writePath, outputData, 0644)
-		check(err)
+		var ciphertext string = ""
+		for _, rn := range plaintext {
+			ciphertext += runeShifter(rn)
+		}
+
+		// capitalise the ciphertext if requested
+
+		if capToggle {
+			ciphertext = s.ToUpper(ciphertext)
+		}
+
+		// check if a write file path was provided. if not, output to command line.
+
+		if writePath == "" {
+
+			// print to command line
+
+			fmt.Println(ciphertext)
+
+		} else {
+
+			// convert ciphertext to byte data and write to the file
+
+			outputData := []byte(ciphertext)
+			err := os.WriteFile(writePath, outputData, 0644)
+			check(err)
+
+		}
 
 	}
 
