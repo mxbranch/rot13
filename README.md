@@ -4,14 +4,22 @@ A simple command line utility which performs rot13 encryption. Project intended 
 
 ## WIP
 
-This utility currently:
+This utility can perform rot13 encoding on ascii text while passing through whitespace and punctuation. It has the following optional flags:
 
-* Can perform rot13 encoding on ascii text while passing through whitespace and punctuation.
-* Has an optional flag -caps to output the ciphertext in caps (as is traditional!)
+* -caps forces the ciphertext output to be all caps (as is traditional!)
+* -read can take a path to a text file to be encrypted.
+* -write can take a path to a text file to save the ciphertext into.
+* -h or -help lists all flags.
 
-In the future the following features will be added:
+Example valid program calls:
 
-* Reading/writing files
+```
+> rot13 hello world
+> rot13 -caps hello world
+> rot13 -read="testfile.txt"
+> rot13 -write="output.txt" hello world
+> rot13 -read="testfile.txt" -write="output.txt"
+```
 
 ## Description
 

@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	s "strings"
 )
 
@@ -17,21 +18,36 @@ func main() {
 	// -read gets a path to a text file which the utility loads to encrypt.
 	// default: ""
 	var readPath string
-	flag.StringVar(&readPath, "read", "", "NOT IMPLEMENTED: Path to a text file to read. Default: empty")
+	flag.StringVar(&readPath, "read", "", "Path to a text file to read. Default: empty")
 
 	// -write gets a path to a text file which the utility will output the encrypted message to.
 	// default: ""
 	var writePath string
-	flag.StringVar(&writePath, "write", "", "NOT IMPLEMENTED: Path to a text file to write the result to. Default: empty")
+	flag.StringVar(&writePath, "write", "", "Path to a text file to write the result to. Default: empty")
 
 	flag.Parse()
 
-	// get plaintext by converting arguments from array to single string
+	// check if a read file path was provided. if not, pull from command line arguments.
 
 	var plaintext string = ""
-	for _, arg := range flag.Args() {
-		plaintext += arg
-		plaintext += " "
+
+	if readPath == "" {
+
+		// get plaintext by converting arguments from array to single string
+
+		for _, arg := range flag.Args() {
+			plaintext += arg
+			plaintext += " "
+		}
+
+	} else {
+
+		// get plaintext by reading entire file in
+
+		data, err := os.ReadFile(readPath)
+		check(err)
+		plaintext += string(data)
+
 	}
 
 	// go through plaintext one rune at a time and parse each character
@@ -47,7 +63,23 @@ func main() {
 		ciphertext = s.ToUpper(ciphertext)
 	}
 
-	fmt.Println(ciphertext)
+	// check if a write file path was provided. if not, output to command line.
+
+	if writePath == "" {
+
+		// print to command line
+
+		fmt.Println(ciphertext)
+
+	} else {
+
+		// convert ciphertext to byte data and write to the file
+
+		outputData := []byte(ciphertext)
+		err := os.WriteFile(writePath, outputData, 0644)
+		check(err)
+
+	}
 
 }
 
@@ -79,5 +111,14 @@ func runeShifter(rn rune) string {
 	// these pass through without change
 
 	return string(rn)
+
+}
+
+func check(e error) {
+	// simple error parser
+
+	if e != nil {
+		panic(e)
+	}
 
 }
