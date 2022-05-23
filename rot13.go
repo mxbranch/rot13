@@ -66,7 +66,8 @@ func main() {
 
 		var ciphertext string = ""
 		for _, rn := range plaintext {
-			ciphertext += runeShifter(rn)
+			shifted := shift(rn, 13)
+			ciphertext += string(shifted)
 		}
 
 		// capitalise the ciphertext if requested
@@ -97,7 +98,7 @@ func main() {
 
 }
 
-func runeShifter(rn rune) string {
+func shift(rn rune, val int) rune {
 	// we need to treat capital and lower case letters differently
 	// so first we need to determine which is happening here
 
@@ -105,7 +106,7 @@ func runeShifter(rn rune) string {
 
 		// capitals - 65 - 90
 
-		rn += 13
+		rn += rune(val)
 		if rn > 90 {
 			rn -= 26
 		}
@@ -114,7 +115,7 @@ func runeShifter(rn rune) string {
 
 		// lower case - 97 - 122
 
-		rn += 13
+		rn += rune(val)
 		if rn > 122 {
 			rn -= 26
 		}
@@ -124,7 +125,7 @@ func runeShifter(rn rune) string {
 	// other (punc, whitespace, etc)
 	// these pass through without change
 
-	return string(rn)
+	return rn
 
 }
 
